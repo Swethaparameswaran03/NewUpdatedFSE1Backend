@@ -9,8 +9,9 @@ public class JwtResponse {
 		super();
 		this.jwtToken = jwtToken;
 	}
+
 	public JwtResponse() {
-		
+
 	}
 
 	public String getJwtToken() {

@@ -20,49 +20,44 @@ import com.tweetapp.utility.JWTUtility;
 
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
-    
+
 	@Autowired
 	private JWTUtility jwtutil;
-	
+
 	@Autowired
 	private JWTUserService jwtuserservice;
-	
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 //System.out.println("success");	
-String authorization = request.getHeader("Authorization");
-String token = null;
-String userName = null;
+		String authorization = request.getHeader("Authorization");
+		String token = null;
+		String userName = null;
 
-if(null != authorization && authorization.startsWith("Bearer ")) {
-    token = authorization.substring(7);
-    userName = jwtutil.getUsernameFromToken(token);
-}
-if(null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
-    UserDetails userDetails
-            = jwtuserservice.loadUserByUsername(userName);
+		if (null != authorization && authorization.startsWith("Bearer ")) {
+			token = authorization.substring(7);
+			userName = jwtutil.getUsernameFromToken(token);
+		}
+		if (null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
+			UserDetails userDetails = jwtuserservice.loadUserByUsername(userName);
 
-    if(jwtutil.validateToken(token,userDetails)) {
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                = new UsernamePasswordAuthenticationToken(userDetails,
-                null, userDetails.getAuthorities());
+			if (jwtutil.validateToken(token, userDetails)) {
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
 
-        usernamePasswordAuthenticationToken.setDetails(
-                new WebAuthenticationDetailsSource().buildDetails(request)
-        );
+				usernamePasswordAuthenticationToken
+						.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-    }
+				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+			}
 
-}
-response.setHeader("Access-Control-Allow-Origin", request.getHeader("*"));
-response.setHeader("Access-Control-Allow-Credentials", "true");
-response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-response.setHeader("Access-Control-Max-Age", "3600");
-response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
-filterChain.doFilter(request, response);
-}
+		}
+		response.setHeader("Access-Control-Allow-Origin", request.getHeader("*"));
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		response.setHeader("Access-Control-Max-Age", "3600");
+		response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
+		filterChain.doFilter(request, response);
 	}
-
-
+}

@@ -13,15 +13,12 @@ import com.tweetapp.entities.DatabaseSequence;
 @Service
 public class SequenceGeneratorService {
 
-    @Autowired 
-    private MongoOperations mongo;
+	@Autowired
+	private MongoOperations mongo;
 
 	public long generateSequence(String seqName) {
-	    DatabaseSequence counter = mongo.findAndModify(
-	            query(where("_id").is(seqName)),
-	            new Update().inc("seq",1),
-	            options().returnNew(true).upsert(true),
-	            DatabaseSequence.class);
-	        return counter.getSeq();
-	    }
+		DatabaseSequence counter = mongo.findAndModify(query(where("_id").is(seqName)), new Update().inc("seq", 1),
+				options().returnNew(true).upsert(true), DatabaseSequence.class);
+		return counter.getSeq();
+	}
 }

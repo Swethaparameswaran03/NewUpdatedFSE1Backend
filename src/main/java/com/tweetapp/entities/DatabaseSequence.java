@@ -10,9 +10,9 @@ import lombok.*;
 @Setter
 @Document(collection = "DatabaseSequences")
 public class DatabaseSequence {
-    @Id
-    private String id;
-    private int seq;
+	@Id
+	private String id;
+	private int seq;
 
 // getters and setters
 }
