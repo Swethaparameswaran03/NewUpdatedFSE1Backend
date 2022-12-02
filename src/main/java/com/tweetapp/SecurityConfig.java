@@ -1,5 +1,7 @@
 package com.tweetapp;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	public void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+		CorsConfiguration methods=new CorsConfiguration();
+		methods.applyPermitDefaultValues();
+		methods.setAllowedMethods(List.of("GET","PUT","DELETE","POST"));
+		
+
+		http.csrf().disable().cors().configurationSource(request -> methods)
+//					new CorsConfiguration().applyPermitDefaultValues())
+//		.and()
+//		.setAllowedMethods(List.of("GET","PUT","DELETE","POST"))
 				.and()
 				// ... here goes your custom security configuration
 				.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()

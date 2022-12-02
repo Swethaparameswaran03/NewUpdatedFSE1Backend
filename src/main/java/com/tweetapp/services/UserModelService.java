@@ -93,7 +93,7 @@ public class UserModelService {
 	}
 
 //
-	public TweetReply replyTweet(TweetReplyRequest request, long tweetId, String username) throws UserException {
+	public TweetReply replyTweet(TweetReplyRequest request, long tweetId, String username) throws UserException, TweetException {
 		List<Tweet> tweetList = tweetrepository.findAll();
 		Tweet tweet = tweetrepository.findByTweetId(tweetId);
 		if (!tweet.equals(null)) {
@@ -109,8 +109,8 @@ public class UserModelService {
 				return tweetReply;
 			}
 		} else {
-			return null;
-//			throw new TweetException("There are no tweets available for this user to reply!!");
+//			return null;
+        throw new TweetException("There are no tweets available for this user to reply!!");
 		}
 		return null;
 	}

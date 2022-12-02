@@ -64,6 +64,7 @@ public class TweetController {
 
 	// method to get all tweets
 	@GetMapping("api/v1.0/tweets/all")
+	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<?> findAllTweets(@RequestHeader("Authorization") String token) throws TweetException {
 		try {
 			List<Tweet> tot = usermodelService.displayAllTweets();
@@ -76,6 +77,7 @@ public class TweetController {
 
 	// method to get all users
 	@GetMapping("api/v1.0/tweets/users/all")
+	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<?> findAllUsers(@RequestHeader("Authorization") String token) throws TweetException {
 
 		Iterable<User> a = usermodelService.displayAllUsers();
@@ -85,6 +87,7 @@ public class TweetController {
 
 	// method to get all tweets of particular user
 	@GetMapping("api/v1.0/tweets/{username}")
+	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<?> findAllTweetsOfUser(@PathVariable String username,
 			@RequestHeader("Authorization") String token) throws TweetException {
 		try {
@@ -99,6 +102,7 @@ public class TweetController {
 
 	// method to search user by username
 	@GetMapping("api/v1.0/tweets/user/search/{username}")
+	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<?> searchByUsername(@PathVariable String username,
 			@RequestHeader("Authorization") String token) throws TweetException {
 		try {
@@ -113,6 +117,7 @@ public class TweetController {
 
 	// method to update tweet of a user
 	@PutMapping("api/v1.0/tweets/{username}/update/{tweetId}")
+	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<?> UpdateTweet(@PathVariable String username, @PathVariable long tweetId,
 			@RequestHeader("Authorization") String token, @RequestBody TweetPostRequest tweetreponse)
 			throws TweetException {
@@ -129,6 +134,7 @@ public class TweetController {
 
 	// method to delete tweet of a user
 	@DeleteMapping("api/v1.0/tweets/{username}/delete/{tweetId}")
+	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<?> DeleteTweet(@PathVariable String username, @PathVariable long tweetId,
 			@RequestHeader("Authorization") String token) throws TweetException {
 		try {
@@ -143,6 +149,7 @@ public class TweetController {
 //    
 	// method to like tweet of a user
 	@PutMapping("api/v1.0/tweets/{username}/like/{tweetId}")
+	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<?> likeTweet(@PathVariable String username, @PathVariable long tweetId,
 			@RequestHeader("Authorization") String token) throws TweetException {
 		try {
@@ -156,6 +163,7 @@ public class TweetController {
 
 	// method to reply to tweet of a user
 	@PostMapping("api/v1.0/tweets/{username}/reply/{tweetId}")
+	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<?> replyTweet(@RequestBody TweetReplyRequest replyRequest, @PathVariable long tweetId,
 			@PathVariable String username, @RequestHeader("Authorization") String token)
 			throws TweetException, UserException {
