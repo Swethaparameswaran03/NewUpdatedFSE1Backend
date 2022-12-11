@@ -150,14 +150,15 @@ public class TweetController {
 	// method to like tweet of a user
 	@PutMapping("api/v1.0/tweets/{username}/like/{tweetId}")
 	@CrossOrigin(origins = "http://localhost:4200")
-	public ResponseEntity<?> likeTweet(@PathVariable String username, @PathVariable long tweetId,
+	public void likeTweet(@PathVariable String username, @PathVariable long tweetId,
 			@RequestHeader("Authorization") String token) throws TweetException {
-		try {
-			Tweet a = usermodelService.likeTweetofUser(username, tweetId);
-			return new ResponseEntity<>(a, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>("The above username and id is not found!!", HttpStatus.NOT_FOUND);
-		}
+//		try {
+		System.out.println("enter");
+		usermodelService.likeTweetofUser(username, tweetId);
+//			return new ResponseEntity<>(a, HttpStatus.OK);
+//		} catch (Exception e) {
+//			return new ResponseEntity<>("The above username and id is not found!!", HttpStatus.NOT_FOUND);
+//		}
 
 	}
 

@@ -1,15 +1,14 @@
 package com.tweetapp.services;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.tweetapp.dto.UserDTO;
 import com.tweetapp.entities.Tweet;
+import com.tweetapp.entities.TweetLike;
 import com.tweetapp.entities.TweetReply;
 import com.tweetapp.entities.User;
 import com.tweetapp.exception.TweetException;
@@ -17,6 +16,7 @@ import com.tweetapp.exception.UserException;
 import com.tweetapp.model.ForgotRequest;
 import com.tweetapp.model.TweetPostRequest;
 import com.tweetapp.model.TweetReplyRequest;
+import com.tweetapp.repositories.TweetLikeRepository;
 import com.tweetapp.repositories.TweetReplyRepository;
 import com.tweetapp.repositories.TweetRepository;
 import com.tweetapp.repositories.UserRepository;
@@ -38,6 +38,9 @@ public class UserModelService {
 
 	@Autowired
 	private PasswordEncoder passwordencoder;
+	
+	@Autowired
+	private TweetLikeRepository like;
 
 	public UserDTO saveUser(User user) throws UserException {
 		user.setUsername(user.getUsername());
@@ -123,10 +126,15 @@ public class UserModelService {
 			for (Tweet u : totalTweets) {
 				Tweet i = u;
 				i.setTweetReplies(repo.findByParenttweetId(i.getTweetId()));
-				total.add(i);
+//				List<TweetLike> findByTweet = like.findByTweet(u);
+//				System.out.println("TWEET LIKES:"+findByTweet);
+//				i.setLikes(findByTweet.size());
+				
+				System.out.println("Tid: "+i.getTweetId()+"Likes:"+i.getLikes());
+				total.add(i); 
 			}
 
-			totalTweets.stream().forEach(System.out::println);
+			//totalTweets.stream().forEach(System.out::println);
 			return total;
 		} else {
 			throw new TweetException("There are no tweets available!!");
@@ -207,20 +215,65 @@ public class UserModelService {
 	}
 
 //	
-	public Tweet likeTweetofUser(String username, long tweetId) throws TweetException {
-		List<User> total = userrepository.findAll();
-		for (User t : total) {
-			if (username.equals(t.getUsername())) {
-				Tweet tweet = tweetrepository.findByTweetId(tweetId);
-				if (t.getUsername().equals(tweet.getUser().get(0).getUsername())) {
-					tweet.setLikes(tweet.getLikes() + 1);
-					Tweet a = tweetrepository.save(tweet);
-					a.setTweetReplies(repo.findByParenttweetId(tweetId));
-					return a;
-				}
-			}
-		}
-		throw new TweetException("There are no tweets available for this user!!");
+	public void likeTweetofUser(String username, long tweetId) {
+//		List<User> total = userrepository.findAll();
+//		for (User t : total) {
+//			if (username.equals(t.getUsername())) {
+//				Tweet tweet = tweetrepository.findByTweetId(tweetId);
+////				if (t.getUsername().equals(tweet.getUser().get(0).getUsername())) {
+//				if(username.equals(tweet.getUser().get(0).getUsername())) {
+		Tweet tweet = tweetrepository.findByTweetId(tweetId);
+		User user=userrepository.findByUsername(username).get().get(0);
+		System.out.println(user);
+		System.out.println(tweet);
+
+					if(checkIflikeIsPresent(username, tweetId))
+					{
+						TweetLike likes=like.findByUserAndTweet(user, tweet);
+						int deleteByUserAndTweet = like.deleteByUserAndTweet(user,tweet);
+						tweet.setLikes(tweet.getLikes()-1) ;
+						tweetrepository.save(tweet);
+						System.out.println(deleteByUserAndTweet);
+					System.out.println("Tid: "+tweetId+" User: "+username+" DisLIKED");
+					}
+					
+					else
+					{TweetLike likes=new TweetLike();
+						likes.setTweet(tweet);
+						likes.setUser(user);
+						tweet.setLikes(tweet.getLikes()+1) ;
+						tweetrepository.save(tweet);
+						like.save(likes);
+						System.out.println("Tid: "+tweetId+" User: "+username+" LIKED");
+						return;
+					}
+//					if(tweet.getLikes()<1)
+//					{	
+//					tweet.setLikes(tweet.getLikes() + 1);
+//					}
+//					else
+//					{
+//						tweet.setLikes(tweet.getLikes()-1);
+//					}
+//				
+//					Tweet a = tweetrepository.save(tweet);			
+//					a.setTweetReplies(repo.findByParenttweetId(tweetId));
+//					System.out.println(a);
+//					return a;
+				
+			
+//  throw new TweetException("There are no tweets available for this user!!");
 	}
 
+	private boolean  checkIflikeIsPresent(String username,long tweetId)
+	{
+				Tweet tweet = tweetrepository.findByTweetId(tweetId);
+				User user=userrepository.findByUsername(username).get().get(0);
+				TweetLike l= like.findByUserAndTweet(user, tweet);
+				System.out.println(l);
+				return (l!=null);
+	}
+	
+
+				
 }
