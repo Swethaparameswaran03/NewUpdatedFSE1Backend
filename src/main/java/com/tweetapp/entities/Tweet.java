@@ -29,7 +29,6 @@ public class Tweet {
 
 	@Id
 	private long tweetId;
-	@Field
 	private List<User> user;
 	@Field
 	private String tweetText;

@@ -30,6 +30,10 @@ public class TweetLike {
 	@Field
 	@JsonIgnore
 	private Tweet tweet;
+	@Override
+	public String toString() {
+		return "\nTweetLike [username=" + username + ", user=" + user + ", tweet=" + tweet + "]";
+	}
 	
 
 }

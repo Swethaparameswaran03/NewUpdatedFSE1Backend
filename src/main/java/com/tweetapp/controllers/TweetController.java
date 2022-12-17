@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tweetapp.entities.Tweet;
+import com.tweetapp.entities.TweetLike;
 import com.tweetapp.entities.TweetReply;
 import com.tweetapp.entities.User;
 import com.tweetapp.exception.TweetException;
@@ -177,4 +179,20 @@ public class TweetController {
 		}
 	}
 
+	@GetMapping("api/v1.0/tweets/{username}/findWhoLiked/{tweetId}")
+	@CrossOrigin(origins = "http://localhost:4200")
+	@ResponseBody
+	public String whoLiked(@PathVariable String username, @PathVariable long tweetId,
+			@RequestHeader("Authorization") String token)
+			throws TweetException, UserException {
+		try {
+
+			String a = usermodelService.findUsernameOfLikesPresent(username,tweetId);
+			//return new ResponseEntity<>(a, HttpStatus.OK);
+			return a;
+		} catch (Exception e) {
+			//return new ResponseEntity<>("The LIKE is not available for above username and tweetid !!", HttpStatus.NOT_FOUND);
+			return ("The LIKE is not available for above username and tweetid !!");
+		}
+	}
 }

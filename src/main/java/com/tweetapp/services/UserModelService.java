@@ -2,6 +2,7 @@ package com.tweetapp.services;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,7 +39,7 @@ public class UserModelService {
 
 	@Autowired
 	private PasswordEncoder passwordencoder;
-	
+
 	@Autowired
 	private TweetLikeRepository like;
 
@@ -96,7 +97,8 @@ public class UserModelService {
 	}
 
 //
-	public TweetReply replyTweet(TweetReplyRequest request, long tweetId, String username) throws UserException, TweetException {
+	public TweetReply replyTweet(TweetReplyRequest request, long tweetId, String username)
+			throws UserException, TweetException {
 		List<Tweet> tweetList = tweetrepository.findAll();
 		Tweet tweet = tweetrepository.findByTweetId(tweetId);
 		if (!tweet.equals(null)) {
@@ -113,7 +115,7 @@ public class UserModelService {
 			}
 		} else {
 //			return null;
-        throw new TweetException("There are no tweets available for this user to reply!!");
+			throw new TweetException("There are no tweets available for this user to reply!!");
 		}
 		return null;
 	}
@@ -129,12 +131,14 @@ public class UserModelService {
 //				List<TweetLike> findByTweet = like.findByTweet(u);
 //				System.out.println("TWEET LIKES:"+findByTweet);
 //				i.setLikes(findByTweet.size());
-				
-				System.out.println("Tid: "+i.getTweetId()+"Likes:"+i.getLikes());
-				total.add(i); 
+
+				System.out.println("Tid: " + i.getTweetId() + "Likes:" + i.getLikes());
+				System.out.println("Tid: " + i.getTweetId() + "Likes:" + i.getTweetReplies());
+
+				total.add(i);
 			}
 
-			//totalTweets.stream().forEach(System.out::println);
+			// totalTweets.stream().forEach(System.out::println);
 			return total;
 		} else {
 			throw new TweetException("There are no tweets available!!");
@@ -223,30 +227,31 @@ public class UserModelService {
 ////				if (t.getUsername().equals(tweet.getUser().get(0).getUsername())) {
 //				if(username.equals(tweet.getUser().get(0).getUsername())) {
 		Tweet tweet = tweetrepository.findByTweetId(tweetId);
-		User user=userrepository.findByUsername(username).get().get(0);
+		User user = userrepository.findByUsername(username).get().get(0);
 		System.out.println(user);
 		System.out.println(tweet);
 
-					if(checkIflikeIsPresent(username, tweetId))
-					{
-						TweetLike likes=like.findByUserAndTweet(user, tweet);
-						int deleteByUserAndTweet = like.deleteByUserAndTweet(user,tweet);
-						tweet.setLikes(tweet.getLikes()-1) ;
-						tweetrepository.save(tweet);
-						System.out.println(deleteByUserAndTweet);
-					System.out.println("Tid: "+tweetId+" User: "+username+" DisLIKED");
-					}
-					
-					else
-					{TweetLike likes=new TweetLike();
-						likes.setTweet(tweet);
-						likes.setUser(user);
-						tweet.setLikes(tweet.getLikes()+1) ;
-						tweetrepository.save(tweet);
-						like.save(likes);
-						System.out.println("Tid: "+tweetId+" User: "+username+" LIKED");
-						return;
-					}
+		if (checkIflikeIsPresent(username, tweetId)) {
+			TweetLike likes = like.findByUserAndTweet(user, tweet);
+			System.out.println(likes.getUser().getUsername() + " " + likes.getTweet().getTweetId());
+			int deleteByUserAndTweet = like.deleteByUserAndTweet(user, tweet);
+			tweet.setLikes(tweet.getLikes() - 1);
+			tweetrepository.save(tweet);
+			System.out.println(tweetrepository.save(tweet));
+			System.out.println(deleteByUserAndTweet);
+			System.out.println("Tid: " + tweetId + " User: " + username + " DisLIKED");
+		}
+
+		else {
+			TweetLike likes = new TweetLike();
+			likes.setTweet(tweet);
+			likes.setUser(user);
+			tweet.setLikes(tweet.getLikes() + 1);
+			tweetrepository.save(tweet);
+			like.save(likes);
+			System.out.println("Tid: " + tweetId + " User: " + username + " LIKED");
+			return;
+		}
 //					if(tweet.getLikes()<1)
 //					{	
 //					tweet.setLikes(tweet.getLikes() + 1);
@@ -260,20 +265,86 @@ public class UserModelService {
 //					a.setTweetReplies(repo.findByParenttweetId(tweetId));
 //					System.out.println(a);
 //					return a;
-				
-			
+
 //  throw new TweetException("There are no tweets available for this user!!");
 	}
 
-	private boolean  checkIflikeIsPresent(String username,long tweetId)
-	{
-				Tweet tweet = tweetrepository.findByTweetId(tweetId);
-				User user=userrepository.findByUsername(username).get().get(0);
-				TweetLike l= like.findByUserAndTweet(user, tweet);
-				System.out.println(l);
-				return (l!=null);
+	private boolean checkIflikeIsPresent(String username, long tweetId) {
+		Tweet tweet = tweetrepository.findByTweetId(tweetId);
+		User user = userrepository.findByUsername(username).get().get(0);
+		TweetLike l = like.findByUserAndTweet(user, tweet);
+		System.out.println(l);
+		return (l != null);
 	}
-	
 
-				
+//	public TweetLike li(User user,Tweet tweet)
+//	{
+//		TweetLike re=like.findByUserAndTweet(user, tweet);
+//		return null;
+//		
+//	}
+//	
+	public String findUsernameOfLikesPresent(String username, long tweetId) {
+		Tweet tweet = tweetrepository.findByTweetId(tweetId);
+		User user = userrepository.findByUsername(username).get().get(0);
+		System.out.println(user);
+		System.out.println(tweet);
+List<TweetLike> findByTweet = like.findAll();
+
+List<TweetLike> filteredTweets = findByTweet.stream().filter(t->t.getTweet().getTweetId()==tweetId).collect(Collectors.toList());
+
+System.out.println("findByTweet: "+findByTweet);
+		if (filteredTweets.size()>0) {
+			TweetLike likes = like.findByUserAndTweet(user, tweet);
+			List<TweetLike> tweetlist = like.findByTweet(tweet);
+			int count = 0;
+			StringBuilder names = new StringBuilder("");
+//						tweetlist.forEach(System.out::println);
+			System.out.println("tweetLikeList: "+filteredTweets);
+			
+			boolean moreThanTwoUser = true;
+			for (int i = 0; i < 2; i++) {
+				try {
+					System.out.println("TWEET LOOP: "+filteredTweets.get(i).getUser().getFirstname());
+					names.append(filteredTweets.get(i).getUser().getFirstname() + ",");
+				} catch (Exception e) {
+					System.out.println(e);
+					names.subSequence(0, names.length() - 2);
+					moreThanTwoUser = false;
+				}
+
+			}
+			System.out.println("Before Names: "+names );
+			if (moreThanTwoUser) {
+				System.out.println(names.lastIndexOf(","));
+				names.replace(names.lastIndexOf(","),names.lastIndexOf(",")+1,"");
+				 //names.subSequence(0, names.lastIndexOf(",")).toString();
+				//System.out.println(subSequence);
+				System.out.println("After Sub: "+names);
+				if (filteredTweets.size() > 2) {
+					names.append(" + " + ((filteredTweets.size()) - 2) + " more");
+				} else {
+					int indexOfComma = names.indexOf(",");
+					names.replace(indexOfComma, indexOfComma + 1, " and ");
+
+				}
+				System.out.println("more than two user:" +names.toString());
+			} else {
+				System.out.println(names.lastIndexOf(","));
+				names.replace(names.lastIndexOf(","),names.lastIndexOf(",")+1,"");
+				System.out.println("one user:" +names.toString());
+			}
+//			System.out.println(likes.getUser().getUsername());
+//			System.out.println(likes.getTweet().getTweetId());
+			System.out.println("FINAL Anmes: "+names.toString());
+			return names.toString();
+//					return;
+		}
+//					else
+//					{
+//						return null;
+//	
+		return "You're are first person to like";
+
+	}
 }
