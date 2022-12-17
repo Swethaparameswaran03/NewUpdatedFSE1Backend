@@ -155,7 +155,7 @@ public class UserModelService {
 	public List<Tweet> displayAllTweetsOfUser(String username) throws UserException, TweetException {
 		List<User> user = findByUsername(username);
 
-		List<Tweet> a = tweetrepository.findByUser(user);
+		List<Tweet> a = tweetrepository.findTweetByUserId(user.get(0).getUsername());
 		if (!a.isEmpty()) {
 			List<Tweet> total = new ArrayList<>();
 			for (Tweet u : a) {
@@ -272,7 +272,9 @@ public class UserModelService {
 	private boolean checkIflikeIsPresent(String username, long tweetId) {
 		Tweet tweet = tweetrepository.findByTweetId(tweetId);
 		User user = userrepository.findByUsername(username).get().get(0);
+		System.out.println("checkIflikeIsPresent");
 		TweetLike l = like.findByUserAndTweet(user, tweet);
+		System.out.println("checkIflikeIsPresent Completed");
 		System.out.println(l);
 		return (l != null);
 	}
