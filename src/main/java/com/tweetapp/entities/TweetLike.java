@@ -24,9 +24,9 @@ import lombok.*;
 public class TweetLike {
 	
 	@Id
-	private String username;
+	private long id;
 	@Field
-	private User user;
+	private String username;
 	@Field
 	@JsonIgnore
 	private long tweetId;

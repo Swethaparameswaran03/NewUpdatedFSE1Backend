@@ -232,9 +232,9 @@ public class UserModelService {
 		System.out.println(tweet);
 
 		if (checkIflikeIsPresent(username, tweetId)) {
-			TweetLike likes = like.findByUserAndTweetId(user, tweetId);
-			System.out.println(likes.getUser().getUsername() + " " + likes.getTweetId());
-			int deleteByUserAndTweet = like.deleteByUserAndTweetId(user, tweetId);
+			TweetLike likes = like.findByUsernameAndTweetId(username, tweetId);
+			System.out.println(likes.getUsername() + " " + likes.getTweetId());
+			int deleteByUserAndTweet = like.deleteByUsernameAndTweetId(username, tweetId);
 			tweet.setLikes(tweet.getLikes() - 1);
 			tweetrepository.save(tweet);
 			System.out.println(tweetrepository.save(tweet));
@@ -243,9 +243,11 @@ public class UserModelService {
 		}
 
 		else {
+			long one=like.findAll().size();
 			TweetLike likes = new TweetLike();
+			likes.setId(one);
 			likes.setTweetId(tweetId);
-			likes.setUser(user);
+			likes.setUsername(username);
 			tweet.setLikes(tweet.getLikes() + 1);
 			tweetrepository.save(tweet);
 			like.save(likes);
@@ -273,7 +275,7 @@ public class UserModelService {
 		Tweet tweet = tweetrepository.findByTweetId(tweetId);
 		User user = userrepository.findByUsername(username).get().get(0);
 		System.out.println("checkIflikeIsPresent");
-		TweetLike l = like.findByUserAndTweetId(user, tweetId);
+		TweetLike l = like.findByUsernameAndTweetId(username, tweetId);
 		System.out.println("checkIflikeIsPresent Completed");
 		System.out.println(l);
 		return (l != null);
@@ -297,7 +299,7 @@ List<TweetLike> filteredTweets = findByTweet.stream().filter(t->t.getTweetId()==
 
 System.out.println("findByTweet: "+findByTweet);
 		if (filteredTweets.size()>0) {
-			TweetLike likes = like.findByUserAndTweetId(user, tweetId);
+			TweetLike likes = like.findByUsernameAndTweetId(username, tweetId);
 			List<TweetLike> tweetlist = like.findByTweetId(tweetId);
 			int count = 0;
 			StringBuilder names = new StringBuilder("");
@@ -307,8 +309,8 @@ System.out.println("findByTweet: "+findByTweet);
 			boolean moreThanTwoUser = true;
 			for (int i = 0; i < 2; i++) {
 				try {
-					System.out.println("TWEET LOOP: "+filteredTweets.get(i).getUser().getFirstname());
-					names.append(filteredTweets.get(i).getUser().getFirstname() + ",");
+					System.out.println("TWEET LOOP: "+filteredTweets.get(i).getUsername());
+					names.append(filteredTweets.get(i).getUsername() + ",");
 				} catch (Exception e) {
 					System.out.println(e);
 					names.subSequence(0, names.length() - 2);
