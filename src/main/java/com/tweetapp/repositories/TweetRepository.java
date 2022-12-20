@@ -11,6 +11,7 @@ import com.tweetapp.entities.User;
 @Repository
 public interface TweetRepository extends MongoRepository<Tweet, Long> {
 
+    @Query("{ _id:?0 }")
 	public Tweet findByTweetId(long tweetId);
 
 	public Tweet deleteByTweetId(long tweetId);

@@ -232,9 +232,9 @@ public class UserModelService {
 		System.out.println(tweet);
 
 		if (checkIflikeIsPresent(username, tweetId)) {
-			TweetLike likes = like.findByUserAndTweet(user, tweet);
-			System.out.println(likes.getUser().getUsername() + " " + likes.getTweet().getTweetId());
-			int deleteByUserAndTweet = like.deleteByUserAndTweet(user, tweet);
+			TweetLike likes = like.findByUserAndTweetId(user, tweetId);
+			System.out.println(likes.getUser().getUsername() + " " + likes.getTweetId());
+			int deleteByUserAndTweet = like.deleteByUserAndTweetId(user, tweetId);
 			tweet.setLikes(tweet.getLikes() - 1);
 			tweetrepository.save(tweet);
 			System.out.println(tweetrepository.save(tweet));
@@ -244,7 +244,7 @@ public class UserModelService {
 
 		else {
 			TweetLike likes = new TweetLike();
-			likes.setTweet(tweet);
+			likes.setTweetId(tweetId);
 			likes.setUser(user);
 			tweet.setLikes(tweet.getLikes() + 1);
 			tweetrepository.save(tweet);
@@ -273,7 +273,7 @@ public class UserModelService {
 		Tweet tweet = tweetrepository.findByTweetId(tweetId);
 		User user = userrepository.findByUsername(username).get().get(0);
 		System.out.println("checkIflikeIsPresent");
-		TweetLike l = like.findByUserAndTweet(user, tweet);
+		TweetLike l = like.findByUserAndTweetId(user, tweetId);
 		System.out.println("checkIflikeIsPresent Completed");
 		System.out.println(l);
 		return (l != null);
@@ -293,12 +293,12 @@ public class UserModelService {
 		System.out.println(tweet);
 List<TweetLike> findByTweet = like.findAll();
 
-List<TweetLike> filteredTweets = findByTweet.stream().filter(t->t.getTweet().getTweetId()==tweetId).collect(Collectors.toList());
+List<TweetLike> filteredTweets = findByTweet.stream().filter(t->t.getTweetId()==tweetId).collect(Collectors.toList());
 
 System.out.println("findByTweet: "+findByTweet);
 		if (filteredTweets.size()>0) {
-			TweetLike likes = like.findByUserAndTweet(user, tweet);
-			List<TweetLike> tweetlist = like.findByTweet(tweet);
+			TweetLike likes = like.findByUserAndTweetId(user, tweetId);
+			List<TweetLike> tweetlist = like.findByTweetId(tweetId);
 			int count = 0;
 			StringBuilder names = new StringBuilder("");
 //						tweetlist.forEach(System.out::println);

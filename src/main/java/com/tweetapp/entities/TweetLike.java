@@ -29,11 +29,11 @@ public class TweetLike {
 	private User user;
 	@Field
 	@JsonIgnore
-	private Tweet tweet;
-	@Override
-	public String toString() {
-		return "\nTweetLike [username=" + username + ", user=" + user + ", tweet=" + tweet + "]";
-	}
+	private long tweetId;
+//	@Override
+//	public String toString() {
+//		return "\nTweetLike [user=" + user + ", tweet=" + tweet + "]";
+//	}
 	
 
 }

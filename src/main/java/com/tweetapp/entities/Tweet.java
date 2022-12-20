@@ -1,5 +1,6 @@
 package com.tweetapp.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +26,7 @@ import lombok.Setter;
 @Document(collection = "tweet")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
-public class Tweet {
+public class Tweet  {
 
 	@Id
 	private long tweetId;

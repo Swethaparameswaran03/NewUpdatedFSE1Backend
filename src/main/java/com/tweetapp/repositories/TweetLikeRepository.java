@@ -13,15 +13,20 @@ import com.tweetapp.entities.User;
 public interface TweetLikeRepository extends MongoRepository<TweetLike, String>{
 	
 
-	//@Query("{$and:[{user.username: ?0},{tweet.tweetId: ?1}] }")
-	public TweetLike findByUserAndTweet(User user, Tweet tweetId);
+//	@Query("{$and:[{user.username: ?0},{tweet.tweetId: ?1}] }")
+//	@Query("{$and: [{user:[username: ?0]},{tweet:[tweetId: ?1]}] }")
+	public TweetLike findByUserAndTweetId(User user, long tweetId);
 
 	public List<TweetLike> deleteByUser(List<User> user);
 
 	public TweetLike deleteByUser(String username);
+	
+//	@Query("{$and: [{user: ?0},{tweet: ?1}] }")
+//    @Query("{$and: [{user:[username: ?0]},{tweet:[tweetId: ?1]}] }")
+	public int deleteByUserAndTweetId(User user, long tweetId);
 
-	public int deleteByUserAndTweet(User user, Tweet tweet);
+	public List<TweetLike> findByTweetId(long tweetId);
 
-	public List<TweetLike> findByTweet(Tweet tweet);
+	public List<TweetLike> save(Tweet tweet);
 
 }
