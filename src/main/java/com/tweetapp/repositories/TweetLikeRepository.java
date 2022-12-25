@@ -28,5 +28,7 @@ public interface TweetLikeRepository extends MongoRepository<TweetLike, Long>{
 	public List<TweetLike> findByTweetId(long tweetId);
 
 	public List<TweetLike> save(Tweet tweet);
+	
+	public int deleteByTweetId(long tweetId);
 
 }

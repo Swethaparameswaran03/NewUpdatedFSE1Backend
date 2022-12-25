@@ -211,7 +211,9 @@ public class UserModelService {
 			if (username.equals(t.getUsername())) {
 				Tweet tweet = tweetrepository.findByTweetId(tweetId);
 				if (t.getUsername().equals(tweet.getUser().get(0).getUsername())) {
-					return tweetrepository.deleteByTweetId(tweetId);
+					Tweet ti= tweetrepository.deleteByTweetId(tweetId);
+					like.deleteByTweetId(tweetId);
+					return ti;
 				}
 			}
 		}
