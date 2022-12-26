@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.tweetapp.dto.TweetModel;
 import com.tweetapp.dto.UserDTO;
 import com.tweetapp.entities.Tweet;
 import com.tweetapp.entities.TweetLike;
@@ -120,22 +122,32 @@ public class UserModelService {
 		return null;
 	}
 
-	public List<Tweet> displayAllTweets() throws TweetException {
+	public List<TweetModel> displayAllTweets() throws TweetException {
 		List<Tweet> totalTweets = tweetrepository.findAll();
 		if (!totalTweets.isEmpty()) {
 			List<TweetReply> replies = repo.findAll();
-			List<Tweet> total = new ArrayList<>();
+			List<TweetModel> total = new ArrayList<>();
 			for (Tweet u : totalTweets) {
 				Tweet i = u;
 				i.setTweetReplies(repo.findByParenttweetId(i.getTweetId()));
 //				List<TweetLike> findByTweet = like.findByTweet(u);
 //				System.out.println("TWEET LIKES:"+findByTweet);
 //				i.setLikes(findByTweet.size());
+				
 
 				System.out.println("Tid: " + i.getTweetId() + "Likes:" + i.getLikes());
 				System.out.println("Tid: " + i.getTweetId() + "Likes:" + i.getTweetReplies());
+				List<TweetLike> k=like.findByTweetId(i.getTweetId());
+			List<String> j=k.stream().map(t->t.getUsername()).collect(Collectors.toList());
+			String s="";
+			for(String r:j)
+			{
+				s=s+r;
 
-				total.add(i);
+			}
+				TweetModel y=new TweetModel(i);
+				y.setUsername(s);
+				total.add(y);
 			}
 
 			// totalTweets.stream().forEach(System.out::println);
@@ -154,7 +166,6 @@ public class UserModelService {
 
 	public List<Tweet> displayAllTweetsOfUser(String username) throws UserException, TweetException {
 		List<User> user = findByUsername(username);
-
 		List<Tweet> a = tweetrepository.findTweetByUserId(user.get(0).getUsername());
 		if (!a.isEmpty()) {
 			List<Tweet> total = new ArrayList<>();
@@ -212,6 +223,7 @@ public class UserModelService {
 				Tweet tweet = tweetrepository.findByTweetId(tweetId);
 				if (t.getUsername().equals(tweet.getUser().get(0).getUsername())) {
 					Tweet ti= tweetrepository.deleteByTweetId(tweetId);
+//					repo.deleteByparenttweetId(tweetId);
 					like.deleteByTweetId(tweetId);
 					return ti;
 				}
@@ -247,7 +259,10 @@ public class UserModelService {
 		else {
 			long one=like.findAll().size();
 			TweetLike likes = new TweetLike();
-			likes.setId(one);
+//			likes.setId(one+1);
+//			tweet.setTweetId(gen.generateSequence(User.SEQUENCE_NAME));
+likes.setId(gen.generateSequence(User.SEQUENCE_NAME));
+			System.out.println(one++);
 			likes.setTweetId(tweetId);
 			likes.setUsername(username);
 			tweet.setLikes(tweet.getLikes() + 1);

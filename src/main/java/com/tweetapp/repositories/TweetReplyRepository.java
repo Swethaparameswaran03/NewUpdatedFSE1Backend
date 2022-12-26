@@ -12,4 +12,6 @@ public interface TweetReplyRepository extends MongoRepository<TweetReply, Long> 
 
 	List<TweetReply> findByParenttweetId(long parenttweetId);
 
+	public long deleteByparenttweetId(long parenttweetId);
+
 }

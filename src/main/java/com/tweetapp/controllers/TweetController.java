@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tweetapp.dto.TweetModel;
 import com.tweetapp.entities.Tweet;
 import com.tweetapp.entities.TweetLike;
 import com.tweetapp.entities.TweetReply;
@@ -69,7 +70,7 @@ public class TweetController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<?> findAllTweets(@RequestHeader("Authorization") String token) throws TweetException {
 		try {
-			List<Tweet> tot = usermodelService.displayAllTweets();
+			List<TweetModel> tot = usermodelService.displayAllTweets();
 			return new ResponseEntity<>(tot, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("There are no tweets Available!", HttpStatus.NOT_FOUND);
