@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 
-@Data
-@Builder
+//@Data
+//@Builder
 @Getter
 @Setter
 @AllArgsConstructor

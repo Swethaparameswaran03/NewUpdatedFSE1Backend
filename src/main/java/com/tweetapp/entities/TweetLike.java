@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.*;
 
-@Data
-@Builder
+//@Data
+//@Builder
 @Getter
 @Setter
 @AllArgsConstructor

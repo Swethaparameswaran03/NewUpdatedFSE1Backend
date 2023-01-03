@@ -70,6 +70,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] AUTH_WHITELIST = {
 			// -- Swagger UI v2
-			"/api/v1.0/tweets/register", "/api/v1.0/tweets/login","/api/v1.0/tweets/*/forgot" };
+			"/api/v1.0/tweets/register", "/api/v1.0/tweets/login","/api/v1.0/tweets/*/forgot", "/api/v1.0/tweets/*/delete",
+			"/v3/api-docs/**",
+            "/swagger-ui/**" ,
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/swagger-ui/index.html"
+};
 
 }

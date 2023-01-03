@@ -3,7 +3,7 @@ package com.tweetapp.controllers;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,7 +63,15 @@ public class UserController {
 			}
 		}
 		User user = new User();
-		BeanUtils.copyProperties(user, request);
+		System.out.println(request.getContactno());
+//		BeanUtils.copyProperties(user, request);
+		user.setUsername(request.getUsername());
+		user.setPassword(request.getPassword());
+		user.setFirstname(request.getFirstname());
+		user.setLastname(request.getLastname());
+		user.setGender(request.getGender());
+		user.setContactno(request.getContactno());
+
 		UserDTO savedUser = usermodelservice.saveUser(user);
 		return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
 	}
@@ -78,6 +87,7 @@ public class UserController {
 			return new ResponseEntity<>("Not authorized", HttpStatus.BAD_REQUEST);
 		}
 		final UserDetails userDetails = jwtuserService.loadUserByUsername(jwtrequest.getUsername());
+		System.out.println(userDetails);
 		final String token = jwtutil.generateToken(userDetails);
 		return new ResponseEntity<>(new JwtResponse(token), HttpStatus.OK);
 	}
@@ -95,5 +105,18 @@ public class UserController {
 
 		}
 	}
+	
+//	@DeleteMapping("api/v1.0/tweets/{username}/delete")
+//	public ResponseEntity<?> delete(@PathVariable String username)
+//			throws UserException {
+//		try {
+//	 usermodelservice.deleteUser(username);
+//			return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
+//		} catch (Exception e) {
+//			return new ResponseEntity<>("Delete failed", HttpStatus.BAD_REQUEST);
+//
+//		}
+//	}
+	
 
 }

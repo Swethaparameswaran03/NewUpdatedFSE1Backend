@@ -1,12 +1,12 @@
 package com.tweetapp.http;
 
-import lombok.Data;
+import lombok.*;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 public class UserRegisterationRequest {
 

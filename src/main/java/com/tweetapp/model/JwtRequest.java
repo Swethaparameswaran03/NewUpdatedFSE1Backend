@@ -2,14 +2,14 @@ package com.tweetapp.model;
 
 import lombok.Data;
 
-@Data
+//@Data
 public class JwtRequest {
 
-	public JwtRequest(String username, String password) {
-		super();
-		this.username = username;
-		this.password = password;
-	}
+//	public JwtRequest(String username, String password) {
+//		super();
+//		this.username = username;
+//		this.password = password;
+//	}
 
 	public String getUsername() {
 		return username;

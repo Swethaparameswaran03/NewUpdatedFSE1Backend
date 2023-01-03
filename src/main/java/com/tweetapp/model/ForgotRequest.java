@@ -1,15 +1,14 @@
 package com.tweetapp.model;
 
-import lombok.Data;
 
-@Data
+//@Data
 public class ForgotRequest {
-	public ForgotRequest(String username, String confirmPassword, String newPassword) {
-		super();
-		this.username = username;
-		this.confirmPassword = confirmPassword;
-		this.newPassword = newPassword;
-	}
+//	public ForgotRequest(String username, String confirmPassword, String newPassword) {
+//		super();
+//		this.username = username;
+//		this.confirmPassword = confirmPassword;
+//		this.newPassword = newPassword;
+//	}
 
 	public ForgotRequest() {
 

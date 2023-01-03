@@ -15,8 +15,8 @@ import com.tweetapp.entities.User;
 import lombok.*;
 
 @Data
-@Getter
-@Setter
+//@Getter
+//@Setter
 public class TweetModel {
 
 	private long tweetId;

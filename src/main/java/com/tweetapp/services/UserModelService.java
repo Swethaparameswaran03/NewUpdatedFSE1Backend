@@ -45,15 +45,25 @@ public class UserModelService {
 	@Autowired
 	private TweetLikeRepository like;
 
+	public UserModelService() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public UserDTO saveUser(User user) throws UserException {
 		user.setUsername(user.getUsername());
 		user.setPassword(passwordencoder.encode(user.getPassword()));
+		System.out.println(user.getPassword());
+//		if(userrepository.findByUsername(user.getUsername())==null) {
 
 		User Saveduser = userrepository.save(user);
 		UserDTO dto = convertUsertoUserDto(Saveduser);
 
 		return dto;
-	}
+		}
+//		else
+//		{
+//			throw new UserException( "Username already exists");
+//		}
 
 	private UserDTO convertUsertoUserDto(User user) {
 		return new UserDTO(user.getUsername(), user.getFirstname(), user.getLastname(), user.getContactno(),
@@ -89,9 +99,9 @@ public class UserModelService {
 				tweet.setTweetId(gen.generateSequence(User.SEQUENCE_NAME));
 				tweet.setTweetDate(new Date());
 				tweet.setUser(user);
-				if (username.equals(userrepository.findByUsername(username))) {
+//				if (username.equals(userrepository.findByUsername(username))) {
 					tweet = tweetrepository.save(tweet);
-				}
+//				}
 				return tweetrepository.save(tweet);
 			}
 		}
@@ -188,8 +198,9 @@ public class UserModelService {
 		Optional<List<User>> optional = userrepository.findByUsername(username);
 		if (optional.isPresent())
 			return optional.get();
-
+		
 		throw new UserException("User Not Found");
+	
 	}
 
 	public List<User> searchbyUsername(String username) throws UserException {
@@ -368,4 +379,10 @@ System.out.println("findByTweet: "+findByTweet);
 		return "You're are first person to like";
 
 	}
+
+//	public void deleteUser(String username) {
+//		// TODO Auto-generated method stub
+//		
+//		userrepository.deleteByUsername(username);
+//	}
 }

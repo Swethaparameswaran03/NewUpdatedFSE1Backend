@@ -6,9 +6,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 
-@NoArgsConstructor
+//@NoArgsConstructor
 public class UserDTO {
 
 	@NonNull
