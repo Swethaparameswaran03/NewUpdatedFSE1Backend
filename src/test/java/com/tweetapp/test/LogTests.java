@@ -49,7 +49,7 @@ public class LogTests {
 
 		u.setUsername("swetha");
 
-		u.setPassword("password");
+		u.setPassword("swetha");
 
 //	List<com.tweetapp.entities.User> user= new ArrayList<>();
 //		  user.add(new com.tweetapp.entities.User("swetha","swetha","swetha","p","female","9566644979"));
