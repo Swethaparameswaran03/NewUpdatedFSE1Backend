@@ -32,6 +32,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 //System.out.println("success");	
 		String authorization = request.getHeader("Authorization");
+		System.out.println("authorization: " + authorization);
 		String token = null;
 		String userName = null;
 

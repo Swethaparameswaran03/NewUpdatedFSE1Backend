@@ -18,13 +18,13 @@ public class JWTUtility implements Serializable {
 
 	private static final long serialVersionUID = 234234523523L;
 
-	public static final long JWT_TOKEN_VALIDITY = 10 * 6;
+	public static final long JWT_TOKEN_VALIDITY = 300;
 
 	@Value("${jwt.secret}")
 	private String secretKey;
 	private int jwtExpirationInMs;
 
-	@Value("${jwt.expirationDateInMs}")
+//	@Value("${jwt.expirationDateInMs}")
 	public void setJwtExpirationInMs(int jwtExpirationInMs) {
 		this.jwtExpirationInMs = jwtExpirationInMs;
 	}
