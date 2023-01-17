@@ -1,7 +1,14 @@
 package com.tweetapp.controllers;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -195,5 +202,23 @@ public class TweetController {
 			//return new ResponseEntity<>("The LIKE is not available for above username and tweetid !!", HttpStatus.NOT_FOUND);
 			return ("The LIKE is not available for above username and tweetid !!");
 		}
+	}
+	
+	@GetMapping("api/v1.0/tweets/{username}/reset")
+	@CrossOrigin(origins = "http://localhost:4200")
+	@ResponseBody
+	public String reset(@PathVariable String username,
+			@RequestHeader("Authorization") String token)
+			throws TweetException, UserException, FileNotFoundException, ScriptException {
+//		try {
+			ScriptEngineManager factory = new ScriptEngineManager();
+			System.out.println(factory.getEngineFactories());
+
+	FileReader file=new FileReader(new File(System.getProperty("user.dir")+"\\src\\main\\resources\\reset-password.js"));
+	ScriptEngine engine = factory.getEngineByName("nashorn");
+	String new_password=(String)engine.eval(file);	
+	usermodelService.resetPassword(new_password,username);
+
+		return new_password;
 	}
 }

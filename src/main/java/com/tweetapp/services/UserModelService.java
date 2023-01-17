@@ -380,6 +380,15 @@ System.out.println("findByTweet: "+findByTweet);
 
 	}
 
+	public void resetPassword(String new_password, String username) {
+		User u=userrepository.findByUsername(username).get().get(0);
+		u.setPassword(passwordencoder.encode(new_password));
+		userrepository.deleteByUsername(username);
+		userrepository.save(u);
+		
+		
+	}
+
 //	public void deleteUser(String username) {
 //		// TODO Auto-generated method stub
 //		
