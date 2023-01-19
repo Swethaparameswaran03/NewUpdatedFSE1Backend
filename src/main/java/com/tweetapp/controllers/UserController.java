@@ -96,16 +96,25 @@ public class UserController {
 	@PostMapping("api/v1.0/tweets/{username}/forgot")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<?> forgot(@PathVariable String username, @RequestBody ForgotRequest forgot)
-			throws UserException {
-		try {
-			User a = usermodelservice.forgot(forgot, username);
-			return new ResponseEntity<>(a, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>("Password and Confirm password should be same", HttpStatus.BAD_REQUEST);
+			throws UserException
 
+	{
+		List<User> user = userrepository.findByUsername(username).get();
+		for (User j : user) {
+			if (j.getUsername().equals(username)) {
+				try {
+					User a = usermodelservice.forgot(forgot, username);
+					return new ResponseEntity<>(a, HttpStatus.OK);
+				} catch (Exception e) {
+					return new ResponseEntity<>("Password and Confirm password should be same", HttpStatus.BAD_REQUEST);
+
+				}
+			}
 		}
+		return new ResponseEntity<>("User doesn't exists", HttpStatus.BAD_REQUEST);
+
 	}
-	
+
 //	@DeleteMapping("api/v1.0/tweets/{username}/delete")
 //	public ResponseEntity<?> delete(@PathVariable String username)
 //			throws UserException {
@@ -117,6 +126,5 @@ public class UserController {
 //
 //		}
 //	}
-	
 
 }

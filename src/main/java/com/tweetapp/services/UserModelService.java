@@ -78,9 +78,10 @@ public class UserModelService {
 				user = optionalUser.get().get(0);
 				user.setPassword(passwordencoder.encode(forgot.getConfirmPassword()));
 				userrepository.save(user);
-			} else {
-				throw new UserException("User Not Found");
 			}
+//			} else {
+//				throw new UserException("User Not Found");
+//			}
 
 			return user;
 		}

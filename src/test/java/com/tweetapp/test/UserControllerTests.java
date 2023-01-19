@@ -289,14 +289,15 @@ public void mockWhenForgotWithNoUserFound() throws JsonProcessingException, Exce
 		u.setNewPassword("swat");
 		u.setConfirmPassword("swat");
 		List<com.tweetapp.entities.User> user= new ArrayList<>();
-		  user.add(new com.tweetapp.entities.User("swathi","swat","swathi","p","female","9566644979"));
-			when(repo.findByUsername(Mockito.any(String.class))).thenReturn(Optional.ofNullable(null));
+		  user.add(new com.tweetapp.entities.User("swathi","swathi","swathi","p","female","9566644979"));
+			when(repo.findByUsername(Mockito.any(String.class))).thenReturn(Optional.ofNullable(new ArrayList<>()));
 //		     when(repo.save(Mockito.any(User.class)));
 //				when(repo.save(Mockito.any(User.class))).thenReturn(new User());
 		mockMvc.perform(post("/api/v1.0/tweets/swathi/forgot")
+				
 		.contentType("application/json")
 		.content(objectMapper.writeValueAsString(u)))
-		.andExpect(status().is4xxClientError());			
+		.andExpect(status().isBadRequest());			
 	}
 }
 //
